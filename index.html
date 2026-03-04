@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寄送網頁python配置工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            margin-bottom: 1.25rem;
+            color: #1f2937;
+        }
+        .section-num {
+            background-color: #2563eb;
+            color: white;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a202c;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+
+    <div class="max-w-7xl mx-auto py-10 px-4">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-2">郵件腳本配置工具</h1>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- 左側：設定表單 -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- SMTP 設定 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="section-title">
+                        <span class="section-num">1</span> SMTP 伺服器設定
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2 lg:col-span-1">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">SMTP Host</label>
+                            <input type="text" id="smtp_host" value="smtp.gmail.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="col-span-2 lg:col-span-1">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Port</label>
+                            <input type="number" id="smtp_port" value="587" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">SMTP 帳號 (Email)</label>
+                            <input type="text" id="smtp_user" placeholder="your-email@gmail.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">SMTP 密碼 / App Password</label>
+                            <input type="password" id="smtp_pass" placeholder="填入密碼" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 寄件者與收件者 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="section-title">
+                        <span class="section-num">2</span> 傳送資訊
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">寄件者名稱</label>
+                                <input type="text" id="mail_from_name" placeholder="系統管理員" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">寄件者信箱</label>
+                                <input type="text" id="sender" placeholder="from@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">收件者 (To)</label>
+                            <input type="text" id="to_list" placeholder="a@ex.com, b@ex.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">副本 (CC)</label>
+                                <input type="text" id="cc_list" placeholder="cc@ex.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">密件副本 (BCC)</label>
+                                <input type="text" id="bcc_list" placeholder="bcc@ex.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">郵件主旨</label>
+                            <input type="text" id="subject" placeholder="請輸入主旨" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 檔案路徑 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="section-title">
+                        <span class="section-num">3</span> 檔案路徑
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">外部 HTML 檔案路徑</label>
+                        <input type="text" id="filePath" value="./your.html" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+                </div>
+
+                <button id="copyFullScript" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-900/20 transition-all flex items-center justify-center gap-2 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                        <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                    </svg>
+                    複製 Python 腳本
+                </button>
+            </div>
+
+            <!-- 右側：腳本預覽 -->
+            <div class="lg:col-span-7 flex flex-col space-y-4">
+                <div class="bg-gray-900 rounded-2xl p-6 shadow-xl flex-grow flex flex-col min-h-[600px]">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-3">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="text-xs font-mono text-gray-500 uppercase">python_script.py</span>
+                    </div>
+                    
+                    <div class="relative flex-grow overflow-hidden">
+                        <pre id="fullCodePreview" class="text-[12px] font-mono text-blue-300 leading-normal overflow-y-auto h-full pr-4 custom-scrollbar"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-8 py-3 rounded-full shadow-2xl transition-opacity opacity-0 pointer-events-none z-50">
+        腳本已成功複製！
+    </div>
+
+    <script>
+        const fields = [
+            'smtp_host', 'smtp_port', 'smtp_user', 'smtp_pass', 
+            'mail_from_name', 'sender', 'to_list', 'cc_list', 'bcc_list', 'subject', 'filePath'
+        ];
+        
+        function parseList(str) {
+            return str.split(',').map(s => `"${s.trim()}"`).filter(s => s !== '""');
+        }
+
+        function generateScript() {
+            const val = {};
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                val[id] = el ? el.value : '';
+            });
+
+            const to = parseList(val.to_list);
+            const cc = parseList(val.cc_list);
+            const bcc = parseList(val.bcc_list);
+
+            return `import smtplib
+import ssl
+from email.message import EmailMessage
+from html.parser import HTMLParser
+from typing import Iterable, Optional
+from email.utils import formataddr
+
+# ===================
+# USER CONFIG (EDIT ME)
+# ===================
+SMTP_HOST = "${val.smtp_host}"
+SMTP_PORT = ${val.smtp_port || 587}
+SMTP_USER = "${val.smtp_user}"
+SMTP_PASS = "${val.smtp_pass}"
+MAIL_FROM_NAME = "${val.mail_from_name}"
+SENDER = "${val.sender}"
+TO = [${to.join(', ')}]
+CC = [${cc.join(', ')}]
+BCC = [${bcc.join(', ')}]
+
+SUBJECT = "${val.subject}"
+
+# Path to external HTML file to send
+HTML_FILE = "${val.filePath}"
+
+# Optional: path to a plain-text fallback file. If empty/None -> auto-generate from HTML.
+TEXT_FALLBACK_FILE: Optional[str] = None
+# ===================
+
+class _HTMLStripper(HTMLParser):
+    """Simple HTML -> text stripper using stdlib only."""
+    def __init__(self):
+        super().__init__()
+        self._chunks = []
+
+    def handle_data(self, d):
+        self._chunks.append(d)
+
+    def get_text(self):
+        return "".join(self._chunks)
+
+def html_to_text(html: str) -> str:
+    stripper = _HTMLStripper()
+    stripper.feed(html)
+    return stripper.get_text().strip() or "Your email client does not support HTML."
+
+def send_html_email(
+    smtp_host: str,
+    smtp_port: int,
+    username: str,
+    password: str,
+    sender: str,
+    sender_name: str,
+    to: Iterable[str],
+    subject: str,
+    html_body: str,
+    text_fallback: Optional[str] = None,
+    cc: Optional[Iterable[str]] = None,
+    bcc: Optional[Iterable[str]] = None,
+) -> None:
+    """Send an HTML email with an optional plaintext fallback."""
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = formataddr((sender_name, sender))
+    msg["To"] = ", ".join(to)
+    if cc:
+        msg["Cc"] = ", ".join(cc)
+
+    if text_fallback is None:
+        text_fallback = html_to_text(html_body)
+
+    msg.set_content(text_fallback)
+    msg.add_alternative(html_body, subtype="html")
+
+    # Combine all recipients for the transport layer
+    recipients = list(to)
+    if cc:
+        recipients.extend(cc)
+    if bcc:
+        recipients.extend(bcc)
+
+    if smtp_port == 465:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smtp_host, smtp_port, context=context) as server:
+            server.login(username, password)
+            server.send_message(msg, from_addr=sender, to_addrs=recipients)
+    else:
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.ehlo()
+            server.starttls(context=ssl.create_default_context())
+            server.ehlo()
+            server.login(username, password)
+            server.send_message(msg, from_addr=sender, to_addrs=recipients)
+
+def main():
+    # Load HTML
+    try:
+        with open(HTML_FILE, "r", encoding="utf-8") as f:
+            html_body = f.read()
+
+        # Load/derive text fallback
+        text_fallback: Optional[str] = None
+        if TEXT_FALLBACK_FILE:
+            with open(TEXT_FALLBACK_FILE, "r", encoding="utf-8") as tf:
+                text_fallback = tf.read()
+
+        # Send
+        print(f"Sending email to {', '.join(TO)}...")
+        send_html_email(
+            smtp_host=SMTP_HOST,
+            smtp_port=SMTP_PORT,
+            username=SMTP_USER,
+            password=SMTP_PASS,
+            sender=SENDER,
+            sender_name=MAIL_FROM_NAME,
+            to=TO,
+            subject=SUBJECT,
+            html_body=html_body,
+            text_fallback=text_fallback,
+            cc=CC or None,
+            bcc=BCC or None,
+        )
+        print("Sent successfully.")
+    except FileNotFoundError:
+        print(f"Error: HTML file '{HTML_FILE}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    main()`;
+        }
+
+        function update() {
+            document.getElementById('fullCodePreview').innerText = generateScript();
+        }
+
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('input', update);
+        });
+
+        document.getElementById('copyFullScript').addEventListener('click', () => {
+            const code = generateScript();
+            const temp = document.createElement('textarea');
+            temp.value = code;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            const t = document.getElementById('toast');
+            t.classList.remove('opacity-0');
+            setTimeout(() => t.classList.add('opacity-0'), 2500);
+        });
+
+        update();
+    </script>
+</body>
+</html>
